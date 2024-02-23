@@ -50,11 +50,20 @@ image_datasets = {
 }
 ```
 
-Update lines 81 and 84 to specify the model checkpoint paths:
+
+Update lines 81 and 84 in `OCTA-GAN_GradCAM.py` to specify the discriminator model checkpoint path:
 ```
 D.load_state_dict(torch.load('./path-to-discriminator', map_location=torch.device('cpu')))
-...
+```
+and optionally for the generator too (to generate Grad-CAMs given a synthetic OCTA-GAN volume as input):
+```
 G.load_state_dict(torch.load('./path-to-generator', map_location=torch.device('cpu')))
+```
+<br/><br/>
+
+To specify the model layers to generate layer-wise Grad-CAMs for by updating line 64 in `OCTA-GAN_GradCAM.py`:
+```
+cam_conv_layer = [2]
 ```
 
 Then generate Grad-CAMs by running the python script:
@@ -62,3 +71,7 @@ Then generate Grad-CAMs by running the python script:
 cd OCTA-GAN
 python3 OCTA-GAN_GradCAM.py
 ```
+
+Below are some example 3D Grad-CAMs generated from OCTA-GAN's discriminator compared to the standard AlphaGAN model when predicted on good-quality OCTA volumes:
+<br/><br/>
+<img width="384" alt="image" src="https://github.com/edsumpena/OCTA-GAN/assets/21966025/69e40858-ec80-4126-b527-1e235b51db5d">
