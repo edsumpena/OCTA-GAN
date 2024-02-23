@@ -60,7 +60,7 @@ def inf_train_gen(data_loader):
         for _, images in enumerate(data_loader):
             yield images
 
-# Specify model layer to apply Grad-CAM
+# Specify model layer(s) to apply Grad-CAM
 cam_conv_layer = [2]
 
 data_points = len(cam_conv_layer)
