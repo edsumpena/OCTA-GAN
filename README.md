@@ -28,7 +28,7 @@ nvsmi (optional, diplays information about GPUs)
 - `AlphaGAN_128.py` - contains implementation of the AlphaGAN generator and discriminator architecture used in the paper as 
 
 ### Training:
-Update line 95 in `train.py` with the dataloader for your dataset:
+Update line 71 in `train.py` with the dataloader for your dataset:
 ```
 image_datasets = {
     'train':    # TODO Add training dataloader
@@ -38,4 +38,27 @@ Then train the model by running the python script:
 ```
 cd OCTA-GAN
 python3 train.py
+```
+
+### Generate Gradient Class Activation Maps (Grad-CAM):
+Update lines 50 - 52 in `OCTA-GAN_GradCAM.py` with the dataloader of your OCTA volumes of various qualities:
+```
+image_datasets = {
+    'train':    # TODO Add dataloader to good-quality volumes
+    'artifact_0':   # TODO Add dataloader to poor-quality volumes
+    'artifact_1':   # TODO Add dataloader to questionable-quality volumes
+}
+```
+
+Update lines 81 and 84 to specify the model checkpoint paths:
+```
+D.load_state_dict(torch.load('./path-to-discriminator', map_location=torch.device('cpu')))
+...
+G.load_state_dict(torch.load('./path-to-generator', map_location=torch.device('cpu')))
+```
+
+Then generate Grad-CAMs by running the python script:
+```
+cd OCTA-GAN
+python3 OCTA-GAN_GradCAM.py
 ```
