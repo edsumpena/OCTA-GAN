@@ -28,7 +28,7 @@ nvsmi (optional, diplays information about GPUs)
 - `AlphaGAN_128.py` - contains implementation of the AlphaGAN generator and discriminator architecture used in the paper as 
 
 ### Training:
-Update line 95 in `train.py` with the dataloader for your dataset:
+Update line 71 in `train.py` with the dataloader for your dataset:
 ```
 image_datasets = {
     'train':    # TODO Add training dataloader
@@ -39,3 +39,40 @@ Then train the model by running the python script:
 cd OCTA-GAN
 python3 train.py
 ```
+
+### Generate Gradient Class Activation Maps (Grad-CAM):
+Update lines 50 - 52 in `OCTA-GAN_GradCAM.py` with the dataloader of your OCTA volumes of various qualities:
+```
+image_datasets = {
+    'train':    # TODO Add dataloader to good-quality volumes
+    'artifact_0':   # TODO Add dataloader to poor-quality volumes
+    'artifact_1':   # TODO Add dataloader to questionable-quality volumes
+}
+```
+
+
+Update lines 81 and 84 in `OCTA-GAN_GradCAM.py` to specify the discriminator model checkpoint path:
+```
+D.load_state_dict(torch.load('./path-to-discriminator', map_location=torch.device('cpu')))
+```
+and optionally for the generator too (to generate Grad-CAMs given a synthetic OCTA-GAN volume as input):
+```
+G.load_state_dict(torch.load('./path-to-generator', map_location=torch.device('cpu')))
+```
+<br/><br/>
+
+To specify the model layers to generate layer-wise Grad-CAMs for by updating line 64 in `OCTA-GAN_GradCAM.py`:
+```
+# Specify model layer(s) to apply Grad-CAM
+cam_conv_layer = [2]
+```
+
+Then generate Grad-CAMs by running the python script:
+```
+cd OCTA-GAN
+python3 OCTA-GAN_GradCAM.py
+```
+
+Below are some example 3D Grad-CAMs generated from OCTA-GAN's discriminator compared to the standard AlphaGAN model when predicted on good-quality OCTA volumes:
+<br/><br/>
+<img width="384" alt="image" src="https://github.com/edsumpena/OCTA-GAN/assets/21966025/69e40858-ec80-4126-b527-1e235b51db5d">
