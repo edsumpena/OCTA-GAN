@@ -1,42 +1,22 @@
 print('Initializing...')
 
-import numpy as np
 import torch
 import os
 
 from torch import nn
 from torch import optim
 from torch.nn import functional as F
-from torch import autograd
 from torch.autograd import Variable
-import nibabel as nib
-from torch.utils.data.dataset import Dataset
-from torch.utils.data import dataloader
-
-import pandas as pd
-# from nilearn import plotting
 
 import torchio as tio
-
-import sklearn.utils
-from sklearn.model_selection import train_test_split
-
 import nvidia_smi
-
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-
 import OCTA_GAN_128 as model
-import Datasets as ds
-import importlib
-importlib.reload(ds)
-from Datasets import *
-
 import gc
-import sys
 
-from fvcore.nn import FlopCountAnalysis, parameter_count_table, flop_count_table
+from fvcore.nn import FlopCountAnalysis, flop_count_table
 
 gc.collect()
 torch.cuda.empty_cache()
@@ -66,12 +46,10 @@ data_transforms = {
     'train': tio.Compose([
         #signal
         tio.RescaleIntensity(percentiles=(0.5, 99.5), out_min_max=(-1, 1)),
-        tio.Clamp(out_min = -1, out_max = 1),
     ]),
     'artifact': tio.Compose([
         #signal
         tio.RescaleIntensity(percentiles=(0.5, 99.5), out_min_max=(-1, 1)),
-        tio.Clamp(out_min = -1, out_max = 1),
     ]),
 }
 
