@@ -63,7 +63,7 @@ G.load_state_dict(torch.load('./path-to-generator', map_location=torch.device('c
 
 To specify the model layers to generate layer-wise Grad-CAMs for by updating line 64 in `OCTA-GAN_GradCAM.py`:
 ```
-# Specify model layer to apply Grad-CAM
+# Specify model layer(s) to apply Grad-CAM
 cam_conv_layer = [2]
 ```
 
