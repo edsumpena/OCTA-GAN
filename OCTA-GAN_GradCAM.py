@@ -4,8 +4,6 @@ import torch.nn as nn
 import torchio as tio
 from torch.autograd import Variable
 import matplotlib.pyplot as plt
-import sklearn.utils
-import pandas as pd
 import torch
 
 from PIL import Image
@@ -15,7 +13,6 @@ from OCTA_GAN_128 import *
 deterministic = True
 
 if deterministic:
-    # 1
     seed = 1
     torch.manual_seed(seed)
     random.seed(seed)
@@ -37,23 +34,6 @@ if device == 'cuda':
 
 # Read in data locations and labels from FHS dataset
 print('Loading dataset...')
-df = pd.read_csv("/projects/octa-3d-shape/FHS/FHS.csv")
-
-bad_imgs = ['P88730593 20201119']
-for i in bad_imgs:
-    df = df[df['Folder'] != i]
-
-df=sklearn.utils.shuffle(df)
-
-filenames = {}
-
-filenames['train'] = df.loc[df['Quality'] == 2].head(2)
-filenames['artifact_0'] = df.loc[df['Quality'] == 0].head(2)
-filenames['artifact_1'] = df.loc[df['Quality'] == 1].head(2)
-
-print(f'There are {len(filenames["train"])} training files.')
-print(f'There are {len(filenames["artifact_0"])} artifact quality 0 files.')
-print(f'There are {len(filenames["artifact_1"])} artifact quality 1 files.')
 
 data_transforms = {
     
