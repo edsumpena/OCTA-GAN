@@ -32,7 +32,7 @@ _eps = 1e-15
 
 LAMBDA_DIVERSITY = 0.35
 
-#setting latent variable sizes
+# Latent variable dimension
 latent_dim = 1024
 
 loss_func = 'hinge'
@@ -44,11 +44,9 @@ device_indexes = [1]
 # Prepare the dataset
 data_transforms = {
     'train': tio.Compose([
-        #signal
         tio.RescaleIntensity(percentiles=(0.5, 99.5), out_min_max=(-1, 1)),
     ]),
     'artifact': tio.Compose([
-        #signal
         tio.RescaleIntensity(percentiles=(0.5, 99.5), out_min_max=(-1, 1)),
     ]),
 }
@@ -187,13 +185,6 @@ c_wasserstein = list()
 g_diversity = list()
 
 
-if not os.path.exists(os.path.dirname('./Gen_CKPTs/' + out_folder + '')):
-    os.makedirs(os.path.dirname('./Gen_CKPTs/' + out_folder + ''))
-
-if not os.path.exists(os.path.dirname('./Gen_CKPTs/' + ckpts_folder + '')):
-    os.makedirs(os.path.dirname('./Gen_CKPTs/' + ckpts_folder + ''))
-
-
 g_iter = 1
 d_iter = 1
 cd_iter = 1
@@ -223,10 +214,11 @@ for iteration in range(TOTAL_ITER):
         x_rand = G(z_rand)
         x_rand_2 = G(z_rand_2)
 
+        # Hinge loss component of the generator loss function
         d_fake_loss = D(x_rand).mean()
         d_loss = -d_fake_loss
 
-        # Mode-seeking diversity loss
+        # Mode-seeking diversity loss to mitigate mode collapse
         diversity = criterion_l1(x_rand, x_rand_2) / criterion_l1(z_rand, z_rand_2)
         eps = 1 * 1e-5
 
@@ -265,7 +257,6 @@ for iteration in range(TOTAL_ITER):
         real_images = Variable(real_images).to(device, non_blocking=True)
 
         x_rand = G(z_rand)
-        # x_loss2 = -2*D(real_images).mean()+D(x_hat).mean()+D(x_rand).mean()
 
         if loss_func == 'wgan-gp':
             d_real = D(real_images).mean()
@@ -280,6 +271,7 @@ for iteration in range(TOTAL_ITER):
             d_optimizer.step()
 
         elif loss_func == 'hinge':
+            # Compute margin-based hinge loss (positive margin of 1)
             d_real = D(real_images)
             d_real = torch.mean(F.relu(1. - d_real))
 

@@ -38,11 +38,9 @@ print('Loading dataset...')
 data_transforms = {
     
     'train': tio.Compose([
-        #signal
         tio.RescaleIntensity(percentiles=(0.5, 99.5), out_min_max=(-1, 1)),
     ]),
     'artifact': tio.Compose([
-        #signal
         tio.RescaleIntensity(percentiles=(0.5, 99.5), out_min_max=(-1, 1)),
     ]),
 }
@@ -53,8 +51,6 @@ image_datasets = {
     'artifact_0':   # TODO Add dataloader to poor-quality volumes
     'artifact_1':   # TODO Add dataloader to questionable-quality volumes
 }
-
-#  'artifact_0': OCTADataset2("/projects/octa-3d-shape/FHS", filenames['artifact_0'], 128, data_transforms['artifact'], augmentations=[]),
 
 dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=1, shuffle=(not deterministic), num_workers=2) for x in ['train', 'artifact_0', 'artifact_1']}
 dataset_sizes = {x: len(image_datasets[x]) for x in ['train', 'artifact_0', 'artifact_1']}
@@ -71,11 +67,8 @@ data_points = len(cam_conv_layer)
 use_gen = True
 latent_dim = 1024
 
-# 11, 14, 17
-
-
+# Load OCTA-GAN model(s)
 D = Discriminator()
-# D = attnGAN.Discriminator_Res_V45(out_class=1)
 D = nn.DataParallel(D)
 D.to(device)
 
@@ -96,7 +89,7 @@ print(D)
 gradient = None
 activations = None
 
-
+# Grad-CAM implementation for non-classification tasks
 class GradCAM:
     def __init__(self, model):
         self.model = model
@@ -128,13 +121,15 @@ class GradCAM:
             if isinstance(module, nn.LeakyReLU) or isinstance(module, nn.ReLU):
                 module.register_forward_hook(forward_hook)
 
-
+    # Generate layer-wise Grad-CAM
     def generate_gradcam(self, input_tensor, layer):
         self.gradient = []
         self.activations = []
         
         self.model.zero_grad()
 
+        # Take the output discriminator score and backpropogate to 
+        # obtain gradients for each layer
         output = self.model(input_tensor)
         one_hot = torch.zeros_like(output)
         one_hot[0,0,0,0,0] = output.mean().data
@@ -147,14 +142,10 @@ class GradCAM:
         gradients = self.gradient[-layer].mean(dim=(2, 3, 4), keepdim=True)
         activations = self.activations[layer - 1]
 
-        # print(gradients)
-        # print(activations)
-
         print(gradients.size())
         print(activations.size())
 
         cam = (gradients * activations).sum(dim=1, keepdim=True)
-        # cam = torch.clamp(cam, min=0)
         cam = torch.abs(cam)
         cam = (cam - cam.min()) / (cam.max() - cam.min())  # Normalize between 0 and 1
 
@@ -164,7 +155,8 @@ class GradCAM:
 
         return cam, score
     
-
+    # FullGradCAM - compute gradients with respect to input volume to highest
+    # resolution class activation map
     def generate_fullgradcam(self, input_tensor):
         self.model.zero_grad()
 
@@ -246,6 +238,8 @@ for i in range(data_points):
 
     min = cam.min()
     max = cam.max()
+
+    # Generate Grad-CAMs and FullGradCAMs for poor-quality volumes
 
     print('\n\nQuality 0 Volume:')
     print(scr)
@@ -336,7 +330,7 @@ for i in range(data_points):
 
 
 
-
+    # Generate Grad-CAMs and FullGradCAMs for questionable-quality volumes
 
     input_image = img_artifact1
     
@@ -436,7 +430,7 @@ for i in range(data_points):
 
 
 
-
+    # Generate Grad-CAMs and FullGradCAMs for good-quality volumes
 
     input_image = img_normal
     
@@ -535,7 +529,7 @@ for i in range(data_points):
     plt.close()
 
 
-
+    # Generate Grad-CAMs and FullGradCAMs for synthetic OCTA-GAN volumes
 
     if use_gen:
         input_image = img_rand
