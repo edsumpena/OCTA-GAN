@@ -4,9 +4,9 @@ Official Pytorch implementation of OCTA-GAN, a novel Generative Adversarial Netw
 ### Framework:
 OCTA-GAN's framework and model architecture is as follows:
 
-<img width="512" alt="image" src="https://github.com/edsumpena/OCTA-GAN/assets/21966025/b83286e9-455d-4bc8-aac5-ffc94005ad12">
+<img width="512" alt="image" src="https://github.com/edsumpena/OCTA-GAN/assets/21966025/fbd31a44-a8e8-4e4b-b2fc-7a3c2a3d2084">
 <br/><br/>
-<img width="512" alt="image" src="https://github.com/edsumpena/OCTA-GAN/assets/21966025/0ebbd82a-38cc-4c75-a609-744302141c53">
+<img width="512" alt="image" src="https://github.com/edsumpena/OCTA-GAN/assets/21966025/97b3a5df-d213-44cf-b8b9-b571cb2a81d2">
 
 ### Dependencies
 
@@ -44,9 +44,9 @@ python3 train.py
 Update lines 50 - 52 in `OCTA-GAN_GradCAM.py` with the dataloader of your OCTA volumes of various qualities:
 ```
 image_datasets = {
-    'train':    # TODO Add dataloader to good-quality volumes
-    'artifact_0':   # TODO Add dataloader to poor-quality volumes
-    'artifact_1':   # TODO Add dataloader to questionable-quality volumes
+    'train':    # TODO Add dataloader to excellent-quality volumes
+    'artifact_0':   # TODO Add dataloader to good-quality volumes
+    'artifact_1':   # TODO Add dataloader to suboptimal-quality volumes
 }
 ```
 
