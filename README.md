@@ -4,9 +4,9 @@ Official Pytorch implementation of OCTA-GAN, a novel Generative Adversarial Netw
 ### Framework:
 OCTA-GAN's framework and model architecture is as follows:
 
-<img width="512" alt="image" src="https://github.com/edsumpena/OCTA-GAN/assets/21966025/b83286e9-455d-4bc8-aac5-ffc94005ad12">
+<img width="512" alt="image" src="https://github.com/edsumpena/OCTA-GAN/assets/21966025/fbd31a44-a8e8-4e4b-b2fc-7a3c2a3d2084">
 <br/><br/>
-<img width="512" alt="image" src="https://github.com/edsumpena/OCTA-GAN/assets/21966025/0ebbd82a-38cc-4c75-a609-744302141c53">
+<img width="512" alt="image" src="https://github.com/edsumpena/OCTA-GAN/assets/21966025/97b3a5df-d213-44cf-b8b9-b571cb2a81d2">
 
 ### Dependencies
 
