@@ -44,9 +44,9 @@ python3 train.py
 Update lines 50 - 52 in `OCTA-GAN_GradCAM.py` with the dataloader of your OCTA volumes of various qualities:
 ```
 image_datasets = {
-    'train':    # TODO Add dataloader to good-quality volumes
-    'artifact_0':   # TODO Add dataloader to poor-quality volumes
-    'artifact_1':   # TODO Add dataloader to questionable-quality volumes
+    'train':    # TODO Add dataloader to excellent-quality volumes
+    'artifact_0':   # TODO Add dataloader to good-quality volumes
+    'artifact_1':   # TODO Add dataloader to suboptimal-quality volumes
 }
 ```
 
