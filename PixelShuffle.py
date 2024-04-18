@@ -6,44 +6,6 @@ from torch.nn import functional as F
 import SingleShotMultiScale as ssms
 
 class ConvPixelShuffleLite3d(nn.Module):
-    """Three dimensional convolution with ICNR initialization followed by PixelShuffle.
-
-    Increases `height` and `width` of `input` tensor by scale, acts like
-    learnable upsampling. Due to `ICNR weight initialization <https://arxiv.org/abs/1707.02937>`__
-    of `convolution` it has similar starting point to nearest neighbour upsampling.
-
-    `kernel_size` got a default value of `3`, `upscale_factor` got a default
-    value of `2`
-
-    Parameters
-    ----------
-    in_channels : int
-        Number of channels in the input image
-    out_channels : int
-        Number of channels produced after PixelShuffle
-    upscale_factor : int, optional
-        Factor to increase spatial resolution by. Default: `2`
-    kernel_size : int or tuple, optional
-        Size of the convolving kernel. Default: `3`
-    stride : int or tuple, optional
-        Stride of the convolution. Default: 1
-    padding: int or tuple, optional
-        Zero-padding added to both sides of the input. Default: 0
-    padding_mode: string, optional
-        Accepted values `zeros` and `circular` Default: `zeros`
-    dilation: int or tuple, optional
-        Spacing between kernel elements. Default: 1
-    groups: int, optional
-        Number of blocked connections from input channels to output channels. Default: 1
-    bias: bool, optional
-        If ``True``, adds a learnable bias to the output. Default: ``True``
-    initializer: typing.Callable[[torch.Tensor,], torch.Tensor], optional
-        Initializer for ICNR initialization, can be a function from `torch.nn.init`.
-        Gets and returns tensor after initialization.
-        Default: `torch.nn.init.kaiming_normal_`
-
-    """
-
     def __init__(
         self,
         in_channels,
@@ -103,44 +65,6 @@ class ConvPixelShuffleLite3d(nn.Module):
         return h
 
 class SSMSConvPixelShuffleLite3d(nn.Module):
-    """Three dimensional convolution with ICNR initialization followed by PixelShuffle.
-
-    Increases `height` and `width` of `input` tensor by scale, acts like
-    learnable upsampling. Due to `ICNR weight initialization <https://arxiv.org/abs/1707.02937>`__
-    of `convolution` it has similar starting point to nearest neighbour upsampling.
-
-    `kernel_size` got a default value of `3`, `upscale_factor` got a default
-    value of `2`
-
-    Parameters
-    ----------
-    in_channels : int
-        Number of channels in the input image
-    out_channels : int
-        Number of channels produced after PixelShuffle
-    upscale_factor : int, optional
-        Factor to increase spatial resolution by. Default: `2`
-    kernel_size : int or tuple, optional
-        Size of the convolving kernel. Default: `3`
-    stride : int or tuple, optional
-        Stride of the convolution. Default: 1
-    padding: int or tuple, optional
-        Zero-padding added to both sides of the input. Default: 0
-    padding_mode: string, optional
-        Accepted values `zeros` and `circular` Default: `zeros`
-    dilation: int or tuple, optional
-        Spacing between kernel elements. Default: 1
-    groups: int, optional
-        Number of blocked connections from input channels to output channels. Default: 1
-    bias: bool, optional
-        If ``True``, adds a learnable bias to the output. Default: ``True``
-    initializer: typing.Callable[[torch.Tensor,], torch.Tensor], optional
-        Initializer for ICNR initialization, can be a function from `torch.nn.init`.
-        Gets and returns tensor after initialization.
-        Default: `torch.nn.init.kaiming_normal_`
-
-    """
-
     def __init__(
         self,
         in_channels,
