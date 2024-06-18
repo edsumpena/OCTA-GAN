@@ -110,7 +110,7 @@ class GradCAM:
 
         for _, module in self.model.module.named_modules():
             if isinstance(module, nn.Conv3d):
-                module.register_backward_hook(backward_hook)
+                module.register_full_backward_hook(backward_hook)
 
     def hook_activations(self):
         def forward_hook(module, input, output):
